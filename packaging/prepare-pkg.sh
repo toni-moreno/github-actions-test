@@ -84,6 +84,8 @@ cp README.md ${TEMPDIR}/rpm/usr/share/${PKGNAME}/
 VERSION=`git describe --abbrev=0 --tag`
 VERSION=`echo $VERSION | sed 's/^v//'`
 
+echo "version=${VERSION}" >> $GITHUB_ENV
+
 fpm     -t rpm  \
         -s dir  \
         --description "${DESCRIPTION}" \
