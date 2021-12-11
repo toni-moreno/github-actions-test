@@ -31,6 +31,7 @@ jobs:
           zip --junk-paths my-artifact README.md hello-world
           packaging/prepare-pkg.sh ./hello-world
           packaging/get-changelog.sh  ${{ steps.branch_name.outputs.SOURCE_TAG }} > ${{ github.workspace }}-CHANGELOG.txt
+          cat ${{ github.workspace }}-CHANGELOG.txt
 
       - name: Upload Release Asset  RPM
         id: upload-release-asset-rpm
