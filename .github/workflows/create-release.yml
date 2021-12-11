@@ -13,6 +13,10 @@ jobs:
     steps:
       - name: Install Go
         uses: actions/setup-go@v2
+      - name: Install FPM
+        run: |
+          sudo apt-get install ruby ruby-dev rubygems build-essential
+          sudo gem install --no-document fpm
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Build project # This would actually build your project, using zip for an example artifact
@@ -20,11 +24,7 @@ jobs:
           go build hello-world.go
           zip --junk-paths my-artifact README.md hello-world
           packaging/prepare-pkg.sh
-      - name: RPM Package
-        uses: bpicode/github-action-fpm@master
-        with:
-          fpm_args: "./build"
-          fpm_opts: "--debug -t rpm  -s dir --description ${{ env.description }} -C ${{ env.tempdir}}/rpm --vendor ${{ env.vendor }} --url ${{ env.url }} --license ${{ env.license }} --maintainer ${{ env.maintainter }} --config-files /usr/share/${{ env.pkgname }}/README.md --config-files /etc/init.d/${{ env.pkgname }} --config-files /etc/sysconfig/${{ env.pkgname }} --config-files /usr/lib/systemd/system/${{ env.pkgname }}.service --after-install packaging/rpm/control/postinst --name ${{ env.pkgname }} --version ${{ env.version }} -p ${{ env.tempdir }}/dist --depends  initscript "
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
