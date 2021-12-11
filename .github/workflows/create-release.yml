@@ -30,7 +30,7 @@ jobs:
           go build hello-world.go
           zip --junk-paths my-artifact README.md hello-world
           packaging/prepare-pkg.sh ./hello-world
-          packaging/get-changelog.sh  ${{ steps.branch_name.outputs.SOURCE_TAG }} > CHANGELOG_DIFF.txt
+          packaging/get-changelog.sh  ${{ steps.branch_name.outputs.SOURCE_TAG }} > ${{ github.workspace }}-CHANGELOG.txt
 
       - name: Upload Release Asset  RPM
         id: upload-release-asset-rpm
@@ -39,8 +39,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
-          name: Release ${{ github.ref }}
-          body_path: CHANGELOG_DIFF.txt
+          name: Release ${{ steps.branch_name.outputs.SOURCE_TAG }} 
+          body_path: ${{ github.workspace }}-CHANGELOG.txt
           draft: false
           prerelease: false
           files: |
