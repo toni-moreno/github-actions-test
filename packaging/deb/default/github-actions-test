@@ -1,0 +1,17 @@
+github-actions-test_USER=github-actions-test
+
+github-actions-test_GROUP=github-actions-test
+
+github-actions-test_HOME=/usr/share/github-actions-test
+
+LOG_DIR=/var/log/github-actions-test
+
+DATA_DIR=/var/lib/github-actions-test
+
+MAX_OPEN_FILES=10000
+
+CONF_DIR=/etc/github-actions-test
+
+CONF_FILE=/etc/github-actions-test/synflux.conf
+
+RESTART_ON_UPGRADE=false

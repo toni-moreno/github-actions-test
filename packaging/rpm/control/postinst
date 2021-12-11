@@ -1,0 +1,75 @@
+#!/bin/sh
+
+set -e
+
+[ -f /etc/sysconfig/github-actions-test ] && . /etc/sysconfig/github-actions-test
+
+startgithub-actions-test() {
+  if [ -x /bin/systemctl ] ; then
+		/bin/systemctl start github-actions-test.service
+	elif [ -x /etc/init.d/github-actions-test ] ; then
+		/etc/init.d/github-actions-test start
+	elif [ -x /etc/rc.d/init.d/github-actions-test ] ; then
+		/etc/rc.d/init.d/github-actions-test start
+	fi
+}
+
+stopgithub-actions-test() {
+	if [ -x /bin/systemctl ] ; then
+		/bin/systemctl stop github-actions-test.service > /dev/null 2>&1 || :
+	elif [ -x /etc/init.d/github-actions-test ] ; then
+		/etc/init.d/github-actions-test stop
+	elif [ -x /etc/rc.d/init.d/github-actions-test ] ; then
+		/etc/rc.d/init.d/github-actions-test stop
+	fi
+}
+
+# Initial installation: $1 == 1
+# Upgrade: $1 == 2, and configured to restart on upgrade
+if [ $1 -eq 1 ] ; then
+	[ -z "$github-actions-test_USER" ] && github-actions-test_USER="github-actions-test"
+	[ -z "$github-actions-test_GROUP" ] && github-actions-test_GROUP="github-actions-test"
+	if ! getent group "$github-actions-test_GROUP" > /dev/null 2>&1 ; then
+    groupadd -r "$github-actions-test_GROUP"
+	fi
+	if ! getent passwd "$github-actions-test_USER" > /dev/null 2>&1 ; then
+    useradd -r -g github-actions-test -d /usr/share/github-actions-test -s /sbin/nologin \
+    -c "github-actions-test user" github-actions-test
+	fi
+
+ 	# Set user permissions on /var/log/github-actions-test, /var/lib/github-actions-test
+	mkdir -p /var/log/github-actions-test /var/lib/github-actions-test
+	chown -R $github-actions-test_USER:$github-actions-test_GROUP /var/log/github-actions-test /var/lib/github-actions-test
+	chmod 755 /var/log/github-actions-test /var/lib/github-actions-test
+
+	# configuration files should not be modifiable by github-actions-test user, as this can be a security issue
+	chown -Rh root:$github-actions-test_GROUP /etc/github-actions-test/*
+	chmod 755 /etc/github-actions-test
+	find /etc/github-actions-test -type f -exec chmod 640 {} ';'
+	find /etc/github-actions-test -type d -exec chmod 755 {} ';'
+
+  if [ -x /bin/systemctl ] ; then
+    echo "### NOT starting on installation, please execute the following statements to configure github-actions-test to start automatically using systemd"
+    echo " sudo /bin/systemctl daemon-reload"
+    echo " sudo /bin/systemctl enable github-actions-test.service"
+    echo "### You can start github-actions-test by executing"
+    echo " sudo /bin/systemctl start github-actions-test.service"
+  elif [ -x /sbin/chkconfig ] ; then
+    echo "### NOT starting github-actions-test by default on bootup, please execute"
+    echo " sudo /sbin/chkconfig --add github-actions-test"
+    echo "### In order to start github-actions-test, execute"
+    echo " sudo service github-actions-test start"
+  fi
+elif [ $1 -ge 2 ] ; then
+  if [ -x /opt/github-actions-test/ ]; then
+    echo "### Upgrading Notice ### "
+    echo "-- New github-actions-test install home is /usr/share/github-actions-test"
+    #echo "-- Please move sqlite3 database to /var/lib/github-actions-test/"
+    echo "-- Notice: service name && binary changed to github-actions-test"
+  fi
+
+  if [ "$RESTART_ON_UPGRADE" == "true" ]; then
+    stopgithub-actions-test
+    startgithub-actions-test
+  fi
+fi

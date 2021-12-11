@@ -1,0 +1,24 @@
+[Unit]
+Description=github-actions-test Agent
+Documentation=http://github.com/toni-moreno/github-actions-test
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+EnvironmentFile=/etc/sysconfig/github-actions-test
+User=github-actions-test
+Group=github-actions-test
+Type=simple
+Restart=on-failure
+WorkingDirectory=/usr/share/github-actions-test
+ExecStart=/usr/sbin/github-actions-test                    \
+                            --pidfile=${PID_FILE}     \
+                            --config=${CONF_FILE}     \
+                            --logs=${LOG_DIR}         \
+                            --home=${HOME_DIR}        \
+                            --data=${DATA_DIR}
+LimitNOFILE=10000
+TimeoutStopSec=20
+
+[Install]
+WantedBy=multi-user.target

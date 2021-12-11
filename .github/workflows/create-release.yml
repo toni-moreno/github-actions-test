@@ -19,6 +19,12 @@ jobs:
         run: |
           go build hello-world.go
           zip --junk-paths my-artifact README.md hello-world
+          packaging/prepare-pkg.sh
+      - name: RPM Package
+        uses: bpicode/github-action-fpm@master
+        with:
+          fpm_args: "./build"
+          fpm_opts: "--debug -t rpm  -s dir --description ${{ env.description }} -C ${{ env.tempdir}}/rpm --vendor ${{ env.vendor }} --url ${{ env.url }} --license ${{ env.license }} --maintainer ${{ env.maintainter }} --config-files /usr/share/${{ env.pkgname }}/README.md --config-files /etc/init.d/${{ env.pkgname }} --config-files /etc/sysconfig/${{ env.pkgname }} --config-files /usr/lib/systemd/system/${{ env.pkgname }}.service --after-install packaging/rpm/control/postinst --name ${{ env.pkgname }} --version ${{ env.version }} -p ${{ env.tempdir }}/dist --depends  initscript "
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -33,8 +39,8 @@ jobs:
             - Second Change
           draft: false
           prerelease: false
-      - name: Upload Release Asset
-        id: upload-release-asset
+      - name: Upload Release Asset ZIP
+        id: upload-release-asset-zip
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -43,3 +49,14 @@ jobs:
           asset_path: ./my-artifact.zip
           asset_name: my-artifact.zip
           asset_content_type: application/zip
+      - name: Upload Release Asset  RPM
+        id: upload-release-asset-rpm
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          asset_path: ${{ env.distdir }}
+          asset_name: github-actions-test-$${{env.version }}-1.x86_64.rpm
+          asset_content_type: application/x-rpm 
+
