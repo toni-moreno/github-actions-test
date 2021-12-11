@@ -104,4 +104,3 @@ fpm     -t rpm  \
 		-p ${TEMPDIR}/dist \
         --depends "initscript" .
 
-echo $T--descriptioEMPDIR
