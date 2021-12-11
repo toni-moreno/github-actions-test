@@ -11,6 +11,12 @@ jobs:
     name: Create Release
     runs-on: ubuntu-latest
     steps:
+      - name: Branch name
+        id: branch_name
+        run: |
+          echo ::set-output name=SOURCE_NAME::${GITHUB_REF#refs/*/}
+          echo ::set-output name=SOURCE_BRANCH::${GITHUB_REF#refs/heads/}
+          echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
       - name: Install Go
         uses: actions/setup-go@v2
       - name: Install FPM
@@ -24,7 +30,7 @@ jobs:
           go build hello-world.go
           zip --junk-paths my-artifact README.md hello-world
           packaging/prepare-pkg.sh ./hello-world
-          packaging/get-changelog.sh ${{ github.ref }} > CHANGELOG_DIFF.txt
+          packaging/get-changelog.sh  ${{ steps.branch_name.outputs.SOURCE_TAG }} > CHANGELOG_DIFF.txt
 
       - name: Upload Release Asset  RPM
         id: upload-release-asset-rpm
@@ -33,7 +39,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          name: Release ${{ github.ref }}
           body_path: CHANGELOG_DIFF.txt
           draft: false
           prerelease: false
