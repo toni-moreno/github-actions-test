@@ -65,7 +65,7 @@ mkdir -p ${TEMPDIR}/rpm/etc/${PKGNAME} #config
 mkdir -p ${TEMPDIR}/rpm/etc/init.d #init.d
 mkdir -p ${TEMPDIR}/rpm/etc/sysconfig #default path
 mkdir -p ${TEMPDIR}/rpm/usr/lib/systemd/system #system
-mkdir -p ${TEMPDIR}/rpm/sbin #system
+mkdir -p ${TEMPDIR}/rpm/usr/sbin
 
 # copy binary
 cp -p  ${BINARY}   ${TEMPDIR}/rpm/usr/sbin/${PKGNAME}
