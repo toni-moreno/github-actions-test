@@ -24,6 +24,7 @@ jobs:
           go build hello-world.go
           zip --junk-paths my-artifact README.md hello-world
           packaging/prepare-pkg.sh ./hello-world
+          packaging/get-changelog.sh > CHANGELOG_DIFF.txt
 
       - name: Create Release
         id: create_release
@@ -31,15 +32,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          body: |
-            Changes in this Release
-            - First Change
-            - Second Change
-          draft: false
-          prerelease: false
-      - name: Upload Release Asset ZIP
+     - name: Upload Release Asset ZIP
         id: upload-release-asset-zip
         uses: actions/upload-release-asset@v1
         env:
@@ -55,7 +48,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body_path: CHANGELOG_DIFF.txt
+          draft: false
+          prerelease: false
           files: |
+            my-artifact.zip
             LICENSE
             ${{ env.distdir }}/github-actions-test-${{env.version }}-1.x86_64.rpm
 
