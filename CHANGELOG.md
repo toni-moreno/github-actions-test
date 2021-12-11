@@ -1,4 +1,4 @@
-# v1.2.6 (released AA/BB/CCCC)
+# v1.2.7 (released AA/BB/CCCC)
 
 
 ### New Features
