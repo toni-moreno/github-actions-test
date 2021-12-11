@@ -24,24 +24,8 @@ jobs:
           go build hello-world.go
           zip --junk-paths my-artifact README.md hello-world
           packaging/prepare-pkg.sh ./hello-world
-          packaging/get-changelog.sh > CHANGELOG_DIFF.txt
+          packaging/get-changelog.sh ${{ github.ref }} > CHANGELOG_DIFF.txt
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-        with:
-     - name: Upload Release Asset ZIP
-        id: upload-release-asset-zip
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-          asset_path: ./my-artifact.zip
-          asset_name: my-artifact.zip
-          asset_content_type: application/zip
       - name: Upload Release Asset  RPM
         id: upload-release-asset-rpm
         uses: softprops/action-gh-release@v1 
