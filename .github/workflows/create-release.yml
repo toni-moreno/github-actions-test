@@ -30,13 +30,14 @@ jobs:
           sudo gem install --no-document fpm
       - name: Build Packages 
         run: |
+          go run build.go pkg-all
           packaging/get-changelog.sh  ${{ steps.branch_name.outputs.SOURCE_TAG }} > ${{ github.workspace }}-CHANGELOG.txt
           cat ${{ github.workspace }}-CHANGELOG.txt
           VERSION=`echo ${{ steps.branch_name.outputs.SOURCE_TAG }}| sed 's/v//g'`
           echo "version=$VERSION" >> $GITHUB_ENV
 
-      - name: Upload Release Asset  RPM
-        id: upload-release-asset-rpm
+      - name: Upload Releases Asset  (RPM/DEB)
+        id: upload-release-asset
         uses: softprops/action-gh-release@v1 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
