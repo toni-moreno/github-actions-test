@@ -368,6 +368,7 @@ func build(pkg string, tags []string, flags []string) {
 		args = append(args, "-race")
 	}
 	args = append(args, "-v")
+	args = append(args, "-x")
 	args = append(args, "-o", binary)
 	args = append(args, pkg)
 	setBuildEnv()
