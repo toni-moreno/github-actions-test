@@ -19,6 +19,8 @@ jobs:
           echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
       - name: Install Go
         uses: actions/setup-go@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
       - name: Build Go Binary
         run: |
           go run build.go build
@@ -26,8 +28,6 @@ jobs:
         run: |
           sudo apt-get install ruby ruby-dev rubygems build-essential
           sudo gem install --no-document fpm
-      - name: Checkout code
-        uses: actions/checkout@v2
       - name: Build Packages 
         run: |
           packaging/get-changelog.sh  ${{ steps.branch_name.outputs.SOURCE_TAG }} > ${{ github.workspace }}-CHANGELOG.txt
