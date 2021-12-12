@@ -42,7 +42,7 @@ func main() {
 	log.SetOutput(os.Stdout)
 	log.SetFlags(0)
 
-	ensureGoPath()
+//	ensureGoPath()
 	//readVersionFromPackageJson()
 	readVersionFromGit()
 
@@ -374,6 +374,8 @@ func build(pkg string, tags []string, flags []string) {
 	setBuildEnv()
 
 	runPrint("go", "version")
+	runPrint("pwd")
+	runPrint("env")
 	runPrint("go", args...)
 
 	// Create an md5 checksum of the binary, to be included in the archive for
