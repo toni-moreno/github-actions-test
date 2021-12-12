@@ -12,12 +12,12 @@
  # datadir set the directory where the data will be placed , also sqlite db if set as db engine
  # if not set the default datadir will be placed in the configuration directory
  # could be set also with SNMPCOL_GENERAL_DATA_DIR env var, default $CWD
- # datadir = "/var/lib/snmpcollector"
+ # datadir = "/var/lib/github-actions-test"
 
  # homedir set the directory where the public web dir will be placed
  # if not set the default homedir will be placed in the current directory
  # could be set also with SNMPCOL_GENERAL_HOME_DIR env var, default $CWD
- # homedir = "/var/lib/snmpcollector"
+ # homedir = "/var/lib/github-actions-test"
 
  # there are as many logs as devices configured
  # logdir set the Directory path for each device individual log
@@ -30,7 +30,7 @@
  loglevel = "info"
 
  # Log mode  could be "file/console" if console have been selected
- # the content for the main snmpcollector.log and http_access.log will 
+ # the content for the main github-actions-test.log and http_access.log will 
  # be writen in stdout 
  # could be set also with  SNMPCOL_GENERAL_LOG_MODE env var
  log_mode = "file"
@@ -59,7 +59,7 @@
 
 # name sets the database name
 # could also be set with SNMPCOL_DATABASE_NAME  env var
- name = "snmpcollector"
+ name = "github-actions-test"
 
 # ssl_mode set ssl in database connection
 # For "postgres", use either "disable", "require" or "verify-full"
@@ -130,7 +130,7 @@ log_mode = "none"
 
  # adds extra tags to the measurement config should be set as a csv - tag=value1,tag2=value2,...,tagN=valN
  # could also be set with SNMPCOL_SELFMON_EXTRATAGS env va
- extratags = [ "instance=snmpcollector01" ]
+ extratags = [ "instance=github-actions-test01" ]
 
 ############################
 # Embedded WebServer Config

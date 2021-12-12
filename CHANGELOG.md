@@ -1,3 +1,7 @@
+# v1.2.9 (released a/b/c )
+### New Features
+* Added npm compilation
+
 # v1.2.8 (released X/y/z)
 
 ### New features

@@ -24,6 +24,15 @@ jobs:
       - name: Build Go Binary
         run: |
           go run build.go build
+      - name: Install Node/NPM
+        uses: actions/setup-node@v2
+        with:
+          node-version: '8.10'
+      - name: Build Frontend 
+        run: |
+          npm install
+          PATH=$(npm bin):$PATH
+          ng build --prod
       - name: Install FPM
         run: |
           sudo apt-get install ruby ruby-dev rubygems build-essential

@@ -249,11 +249,11 @@ func createMinTar() {
 	runPrint("mkdir", "-p", filepath.Join(packageRoot, "/opt/github-actions-test/conf"))
 	runPrint("mkdir", "-p", filepath.Join(packageRoot, "/opt/github-actions-test/bin"))
 	runPrint("mkdir", "-p", filepath.Join(packageRoot, "/opt/github-actions-test/log"))
-//	runPrint("mkdir", "-p", filepath.Join(packageRoot, "/opt/github-actions-test/public"))
+	runPrint("mkdir", "-p", filepath.Join(packageRoot, "/opt/github-actions-test/public"))
 	runPrint("cp", "conf/sample.config.toml", filepath.Join(packageRoot, "/opt/github-actions-test/conf"))
 	runPrint("cp", "bin/github-actions-test", filepath.Join(packageRoot, "/opt/github-actions-test/bin"))
 	runPrint("cp", "bin/github-actions-test.md5", filepath.Join(packageRoot, "/opt/github-actions-test/bin"))
-//	runPrint("cp", "-a", filepath.Join(workingDir, "public")+"/.", filepath.Join(packageRoot, "/opt/github-actions-test/public"))
+	runPrint("cp", "-a", filepath.Join(workingDir, "public")+"/.", filepath.Join(packageRoot, "/opt/github-actions-test/public"))
 	tarname := fmt.Sprintf("dist/github-actions-test-%s-%s_%s_%s.tar.gz", version, getGitSha(), runtime.GOOS, runtime.GOARCH)
 	runPrint("tar", "zcvf", tarname, "-C", packageRoot, ".")
 	runPrint("rm", "-rf", packageRoot)
@@ -279,7 +279,7 @@ func createFpmPackage(options linuxPackageOptions) {
 	// copy systemd filerunPrint("cp", "-a", filepath.Join(workingDir, "tmp")+"/.", filepath.Join(packageRoot, options.homeDir))
 	runPrint("cp", "-p", options.systemdFileSrc, filepath.Join(packageRoot, options.systemdServiceFilePath))
 	// copy release files
-//	runPrint("cp", "-a", filepath.Join(workingDir+"/public"), filepath.Join(packageRoot, options.homeDir))
+	runPrint("cp", "-a", filepath.Join(workingDir+"/public"), filepath.Join(packageRoot, options.homeDir))
 	// remove bin path
 	runPrint("rm", "-rf", filepath.Join(packageRoot, options.homeDir, "bin"))
 	// copy sample ini file to /etc/github-actions-test
@@ -406,7 +406,7 @@ func rmr(paths ...string) {
 
 func clean() {
 	//	rmr("bin", "Godeps/_workspace/pkg", "Godeps/_workspace/bin")
-//	rmr("public")
+	rmr("public")
 	//rmr("tmp")
 	rmr(filepath.Join(os.Getenv("GOPATH"), fmt.Sprintf("pkg/%s_%s/github.com/toni-moreno/github-actions-test", goos, goarch)))
 }
