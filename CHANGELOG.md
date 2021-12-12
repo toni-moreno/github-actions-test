@@ -1,3 +1,10 @@
+# v1.2.8 (released X/y/z)
+
+### New features
+* build from build.go
+* package from build.go
+
+
 # v1.2.7 (released AA/BB/CCCC)
 
 
