@@ -1,3 +1,13 @@
+# v1.2.10 ( release a/b/c)
+### New Features
+ * a
+ * b
+ * c
+### Fixes
+
+* Security fix for CVE-2019-17495
+* Fix #499
+
 # v1.2.9 (released a/b/c )
 ### New Features
 * Added npm compilation
